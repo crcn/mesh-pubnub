@@ -34,19 +34,24 @@ Creates a new pubnub streamer.
 - `reject` - set of commands to reject - default is `[load]`
 
 ```javascript
-var db = pubnub({
+var pubStream = pubnub({
   subscribeKey: "sub key"
   publishKey: "pub key",
   channel: "streamChannel"
 }, ["load", "anotherCommandToIgnore"]);
 
 // does not get broadcasted
-db("anotherCommandToIgnore");
+pubStream("anotherCommandToIgnore");
 ```
 
 #### db.addChannel(channel)
 
 adds a new channel to subscribe to.
+
+```javascript
+pubStream.addChannel("someChannel");
+pubStream.addChannel("anotherChannel");
+```
 
 #### [stream.Readable](https://nodejs.org/api/stream.html#stream_class_stream_readable) db(operationName, options)
 
