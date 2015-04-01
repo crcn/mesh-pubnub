@@ -1,5 +1,5 @@
 ```javascript
-var crudlet     = require("crudlet");
+var crud        = require("crudlet");
 var localStore  = require("crudlet-local-storage");
 var pubnub      = require("crudlet-pubnub");
 
@@ -11,7 +11,7 @@ var db = pubnub({
 
 
 // pipe all ops to local store
-db("tail").pipe(crudlet.open(localStore));
+db("tail").pipe(crud.open(localStore));
 
 // broadcast
 db("insert", { data: { name: "abba" }});
