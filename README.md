@@ -1,17 +1,18 @@
 ```javascript
 var crudlet     = require("crudlet");
 var localStore  = require("crudlet-local-storage");
-var webrtc      = require("crudlet-webrtc");
+var pubnub      = require("crudlet-pubnub");
 
-// get key here: http://peerjs.com/
-var webRtcDb = webrtc({ key: "peer-id" });
-var db = crudlet.parallel(localStore(), webRtcDb);
-
-webRtcDb.peer.connect("peerId");
-
-crudlet.run(db, "tail").on("data", function(operation) {
-  
+var db = pubnub({
+  subscribeKey: "sub key"
+  publishKey: "pub key",
+  channel: "channel"
 });
 
-crudlet.stream(db).write(crudlet.operation("insert", {data: "blarg" }));
+
+// pipe all ops to local store
+db("tail").pipe(crudlet.open(localStore));
+
+// broadcast
+db("insert", { data: { name: "abba" }});
 ```
