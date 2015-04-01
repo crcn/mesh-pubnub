@@ -2,6 +2,8 @@
 
 A streamable interface for [Pubnub](http://www.pubnub.com/). This library also works nicely with [crudlet](https://github.com/mojo-js/crudlet.js), and other crudlet adapters.
 
+#### Example
+
 ```javascript
 var pubnub      = require("crudlet-pubnub");
 
@@ -30,6 +32,17 @@ Creates a new pubnub streamer.
   - `publishKey` - your pubnub publish key
   - `channel` - (optional) the channel to subscribe to
 - `reject` - set of commands to reject - default is `[load]`
+
+```javascript
+var db = pubnub({
+  subscribeKey: "sub key"
+  publishKey: "pub key",
+  channel: "streamChannel"
+}, ["load", "anotherCommandToIgnore"]);
+
+// does not get broadcasted
+db("anotherCommandToIgnore");
+```
 
 #### db.addChannel(channel)
 
