@@ -36,7 +36,7 @@ describe(__filename + "#", function() {
 
   it("braodcasts everything but load", function(next) {
     fakeClient.channel = "a";
-    var db = pubnub(fakeClient);
+    var db = crudlet.clean(pubnub(fakeClient));
     db("insert");
     db("remove");
     db("update");

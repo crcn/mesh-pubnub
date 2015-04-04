@@ -6,6 +6,7 @@ A streamable interface for [Pubnub](http://www.pubnub.com/). This library also w
 
 ```javascript
 var pubnub      = require("crudlet-pubnub");
+var crud        = require("crudlet");
 
 var pubStream = pubnub({
   subscribeKey: "sub key"
@@ -14,7 +15,7 @@ var pubStream = pubnub({
 });
 
 // tail all remote messages
-pubStream("tail", { name: "message" }).on("data", function(operation) {
+pubStream(crud.operation("tail", { name: "message" })).on("data", function(operation) {
   console.log(operation.data.message); // "hello"
 });
 
@@ -41,7 +42,7 @@ var pubStream = pubnub({
 }, ["load", "anotherCommandToIgnore"]);
 
 // does not get broadcasted
-pubStream("anotherCommandToIgnore");
+pubStream(crud.operation("anotherCommandToIgnore"));
 ```
 
 #### db.addChannel(channel)
@@ -49,8 +50,8 @@ pubStream("anotherCommandToIgnore");
 adds a new channel to subscribe to.
 
 ```javascript
-pubStream.addChannel("someChannel");
-pubStream.addChannel("anotherChannel");
+pubStream.addChannel(crud.operation("someChannel"));
+pubStream.addChannel(crud.operation("anotherChannel")_;
 ```
 
 #### [stream.Readable](https://nodejs.org/api/stream.html#stream_class_stream_readable) db(operationName, options)
@@ -58,8 +59,8 @@ pubStream.addChannel("anotherChannel");
 Publishes a new operation to pubnub.
 
 ```javascript
-pubStream("hello", { data: { name: "world" }});
-pubStream("doSomething", { data: { name: "world" }});
+pubStream({ name: "hello", data: { name: "world" }});
+pubStream({ name "doSomething", data: { name: "world" }});
 ```
 
 #### [stream.Readable](https://nodejs.org/api/stream.html#stream_class_stream_readable) db(tail, filter)
@@ -67,7 +68,7 @@ pubStream("doSomething", { data: { name: "world" }});
 Tails a remote operation. This is your subscription function.
 
 ```
-db("tail", { name: "operationName" }).on("data", function(operation) {
+db({ name: "tail" }).on("data", function(operation) {
 
 });
 
@@ -89,11 +90,11 @@ var pubdb = pubnub({
 var db = crud.tailable(loki());
 
 // listen for local operations on lokidb - pass to pubnub
-db("tail").pipe(crud.open(pubdb));
+db(crud.operation("tail")).pipe(crud.open(pubdb));
 
 // listen for remote operations on pubnub - pass to lokidb
-pubdb("tail").pipe(crud.open(db));
+pubdb(crud.operation("tail")).pipe(crud.open(db));
 
 // stored in loki & synchronized across clients
-db("insert", { data: { name: "Juice" }});
+db(crud.operation("insert", { data: { name: "Juice" }}));
 ```
