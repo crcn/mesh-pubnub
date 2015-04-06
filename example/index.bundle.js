@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-var crudlet = require("crudlet");
+var mesh = require("mesh");
 var pubnub  = require("..");
 
 var db = pubnub({ 
@@ -10,16 +10,16 @@ var db = pubnub({
 
 db.addChannel("chatroom");
 
-crudlet.run(db, "tail").on("data", function(operation) {
+mesh.run(db, "tail").on("data", function(operation) {
   console.log("remote operation:", operation);
 });
 
-global.crudlet = crudlet;
+global.mesh = mesh;
 global.db = db;
-global.stream = crudlet.stream(db);
+global.stream = mesh.stream(db);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"..":2,"crudlet":5}],2:[function(require,module,exports){
+},{"..":2,"mesh":5}],2:[function(require,module,exports){
 var through      = require("through2");
 var PUBNUB       = require("pubnub-browserify");
 var sift         = require("sift");

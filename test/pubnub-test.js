@@ -1,6 +1,6 @@
 var expect  = require("expect.js");
 var sinon   = require("sinon");
-var crudlet = require("crudlet");
+var mesh = require("mesh");
 var pubnub  = require("..");
 
 describe(__filename + "#", function() {
@@ -36,7 +36,7 @@ describe(__filename + "#", function() {
 
   it("braodcasts everything but load", function(next) {
     fakeClient.channel = "a";
-    var db = crudlet.clean(pubnub(fakeClient));
+    var db = mesh.clean(pubnub(fakeClient));
     db("insert");
     db("remove");
     db("update");

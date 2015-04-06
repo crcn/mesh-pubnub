@@ -1,4 +1,4 @@
-var crudlet = require("crudlet");
+var mesh = require("mesh");
 var pubnub  = require("..");
 
 var db = pubnub({ 
@@ -8,10 +8,10 @@ var db = pubnub({
 
 db.addChannel("chatroom");
 
-crudlet.run(db, "tail").on("data", function(operation) {
+mesh.run(db, "tail").on("data", function(operation) {
   console.log("remote operation:", operation);
 });
 
-global.crudlet = crudlet;
+global.mesh = mesh;
 global.db = db;
-global.stream = crudlet.stream(db);
+global.stream = mesh.stream(db);
