@@ -34,7 +34,7 @@ describe(__filename + "#", function() {
 
   });
 
-  it("braodcasts everything but load", function(next) {
+  it("braodcasts everything", function(next) {
     fakeClient.channel = "a";
     var db = mesh.clean(pubnub(fakeClient));
     db("insert");
@@ -43,8 +43,18 @@ describe(__filename + "#", function() {
     db("fdfdsfs");
     db("load");
     setTimeout(function() {
-      expect(fakeClient.pubs.length).to.be(4);
+      expect(fakeClient.pubs.length).to.be(5);
       next();
     }, 10);
+  });
+
+  it("passes remote events back to the passed bus", function(next) {
+
+    fakeClient.channel = "a";
+    pubnub(fakeClient, mesh.wrap(function(operation) {
+      next();
+    }));
+
+    fakeClient.subs[0].callback(mesh.op("insert"))
   });
 });

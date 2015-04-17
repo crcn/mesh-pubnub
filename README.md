@@ -6,25 +6,23 @@ A streamable interface for [Pubnub](http://www.pubnub.com/). This library also w
 
 ```javascript
 var pubnub      = require("mesh-pubnub");
+var memory      = require("mesh-memory");
 var mesh        = require("mesh");
 
-var pubStream = pubnub({
+var mem = mesh.tailable(memory());
+
+var pubnub = mesh.reject("load", pubnub({
   subscribeKey: "sub key"
   publishKey: "pub key",
   channel: "streamChannel"
-});
+}, mem);
 
-// tail all remote messages
-pubStream(mesh.operation("tail", { name: "message" })).on("data", function(operation) {
-  console.log(operation.data.message); // "hello"
-});
 
-// publish a remote message to the world
-pubStream("message", { message: "hello" });
+mem(mesh.op("tail")).pipe(mesh.open(pubnub));
 ```
 
 
-#### db pubnub(options[, reject])
+#### db pubnub(options, responseBus)
 
 Creates a new pubnub streamer.
 
@@ -32,14 +30,14 @@ Creates a new pubnub streamer.
   - `subscribeKey` - your pubnub subscription key
   - `publishKey` - your pubnub publish key
   - `channel` - (optional) the channel to subscribe to
-- `reject` - set of commands to reject - default is `[load]`
+- `responseBus` - set of commands to reject - default is `[load]`
 
 ```javascript
 var pubStream = pubnub({
   subscribeKey: "sub key"
   publishKey: "pub key",
   channel: "streamChannel"
-}, ["load", "anotherCommandToIgnore"]);
+}, memoryBus);
 
 // does not get broadcasted
 pubStream(mesh.operation("anotherCommandToIgnore"));
